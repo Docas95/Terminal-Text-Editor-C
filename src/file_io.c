@@ -9,6 +9,7 @@
 #include "output.h"
 #include "input.h"
 
+// open new file, if file can't be found an empty file will be opened
 void editorOpen(char* filename, struct editorConfig* E){
 	free(E->filename);
 	E->filename = strdup(filename);
@@ -41,6 +42,7 @@ void editorOpen(char* filename, struct editorConfig* E){
 	E->saved = 1;
 }
 
+// convert editor rows to a singular string
 char* editorRowsToString(int* buflen, struct editorConfig* E){
 	// allocate memory for all rows
 	*buflen = 0;
@@ -62,6 +64,7 @@ char* editorRowsToString(int* buflen, struct editorConfig* E){
 	return buf;
 }
 
+// save editor information to a file
 void editorSave(struct editorConfig* E, struct abuf* ab){
 	if(E->filename == NULL){
 		E->filename = editorPrompt("Save as (ESC to cancel):", NULL,ab, E);
@@ -93,21 +96,23 @@ void editorSave(struct editorConfig* E, struct abuf* ab){
 	editorSetStatusMessage(E, "Can't save! I/O error: %s", strerror(errno));
 }
 
+// find a word in current file
 void editorFind(struct editorConfig* E, struct abuf* ab){
 	char* query = editorPrompt("Search (ESC to cancel):", editorFindCallBack ,ab, E);
 
 	if(query)
 		free(query);
 }
-
 void editorFindCallBack(char* query, int key, struct editorConfig* E){
 	static int last_match = -1;
 	static int direction = 1;
 
+  // reset variables when search is over
 	if(key == '\r' || key == '\x1b'){
 		last_match = -1;
 		direction = 1;
 		return;
+  // changed search direction with arrow keys  
 	} else if (key == ARROW_RIGHT || key == ARROW_BOTTOM){
 		direction = 1;
 	} else if (key == ARROW_LEFT || key == ARROW_TOP){
@@ -119,14 +124,22 @@ void editorFindCallBack(char* query, int key, struct editorConfig* E){
 
 	if(last_match == -1) direction = 1;
 	int current = last_match;
-	for(int i = 0; i < E->filerows; i++){
+	
+  // search through all rows until query is found
+  for(int i = 0; i < E->filerows; i++){
 		current += direction;
+
+    // keep search within file boundaries
 		if(current == -1) current = E->filerows - 1;
 		else if(current == E->filerows) current = 0;
 
 		erow* row = &E->rows[current];
 		char* match = strstr(row->str, query);
-		if(match){
+		
+    // end loop when query is found
+    // place row at top of sreen
+    // place cursor at query match location
+    if(match){
 			last_match = current;
 			E->cy = current;
 			E->cx = editorRxToCx(row, match - row->rstr);

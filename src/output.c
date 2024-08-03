@@ -6,6 +6,7 @@
 #include "output.h"
 #include "row_operations.h"
 
+// draw on terminal
 void editorRefreshScreen(struct abuf* ab, struct editorConfig* E){
 	// set row and column offsets
 	editorScroll(E);
@@ -13,9 +14,6 @@ void editorRefreshScreen(struct abuf* ab, struct editorConfig* E){
 	// reset buffer
 	ab->len = 0;
 	ab->b = NULL;
-	
-	// clear screen
-	//abAppend(ab, "\x1b[2J", 4);
 	
 	// hide cursor
 	abAppend(ab, "\x1b[?25l", 6);
@@ -40,6 +38,7 @@ void editorRefreshScreen(struct abuf* ab, struct editorConfig* E){
 	write(STDIN_FILENO, ab->b, ab->len);
 }
 
+// draw text rows
 void editorDrawRows(struct abuf* ab, struct editorConfig* E){
 	for(int i = 0; i < E->screenrows; i++){
 		if(i + E->rowoffset >= E->filerows){
@@ -78,9 +77,12 @@ void editorDrawRows(struct abuf* ab, struct editorConfig* E){
 	}
 }
 
+// set column and row offsets
 void editorScroll(struct editorConfig* E){
 	E->rx = 0;
-	if(E->cy < E->filerows) E->rx = editorCxToRx(&E->rows[E->cy], E->cx);
+	
+  // get cursor position on rendered row
+  if(E->cy < E->filerows) E->rx = editorCxToRx(&E->rows[E->cy], E->cx);
 	else E->cx = 0;
 	
 	if(E->rx >= E->coloffset + E->screencols){
@@ -94,6 +96,7 @@ void editorScroll(struct editorConfig* E){
 	}
 }
 
+// draw file status bar
 void editorDrawStatusBar(struct abuf* ab, struct editorConfig* E){
 	// invert screen colors
 	abAppend(ab, "\x1b[7m", 4);
@@ -117,6 +120,7 @@ void editorDrawStatusBar(struct abuf* ab, struct editorConfig* E){
 	abAppend(ab, "\r\n", 2);
 }
 
+// set status msg
 void editorSetStatusMessage(struct editorConfig* E, const char* fmt, ...){
 	// set status msg
 	va_list ap;
@@ -128,12 +132,15 @@ void editorSetStatusMessage(struct editorConfig* E, const char* fmt, ...){
 	E->statusmsg_time = time(NULL);
 }
 
+// draw message bar
 void editorDrawMessageBar(struct abuf* ab, struct editorConfig* E){
 	// clear line
 	abAppend(ab, "\x1b[K", 3);
 	
 	int len = strlen(E->statusmsg);
 	if(len > E->screencols) len = E->screencols;
+
+  // messages are only displayed for 5 seconds
 	if(len && time(NULL) - E->statusmsg_time < 5){
 		abAppend(ab, E->statusmsg, len);
 	}

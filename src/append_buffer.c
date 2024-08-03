@@ -4,6 +4,7 @@
 #include "main.h"
 #include "append_buffer.h"
 
+// append new string to buffer
 void abAppend(struct abuf* ab, char* s, int len){
 	// allocate memory for new string
 	ab->b = realloc(ab->b, ab->len + len);

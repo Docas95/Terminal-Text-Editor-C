@@ -23,29 +23,29 @@
 #define TAB_SIZE 4
 #define QUIT_TIMES 3
 
+// text file row
 typedef struct erow{
-	char* str;
-	char* rstr;
+	char* str; // raw data
+	char* rstr; // data to be rendered on screen
 	int len;
 	int rlen;
 }erow;
 
 struct editorConfig{
-	int cx;
-	int cy;
-	int rx;
+	int cx, cy; // cursor position
+	int rx; // cursor position on rendered string
 	int screenrows;
 	int screencols;
 	int rowoffset;
 	int coloffset;
 	
-	char statusmsg[100];
-	time_t statusmsg_time;
+	char statusmsg[100]; // status msg content
+	time_t statusmsg_time;  // time message was sent
 	
-	char* filename;
-	int filerows;
-	erow* rows;
-	int saved;
+	char* filename; // name of opened file
+	int filerows; // number of rows inside file 
+	erow* rows; // array of file rows 
+	int saved; // set to 0 if changes have been made without saving file
 };
 
 enum editorKeys{

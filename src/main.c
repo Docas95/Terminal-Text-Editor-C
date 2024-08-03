@@ -9,15 +9,18 @@
 #include "file_io.h"
 #include "row_operations.h"
 
-
 // global vars
 struct editorConfig E; // text editor info
 struct abuf ab; // screen content
 
 int main(int argc, char* argv[]){
-	init_editor();
-	enableRawMode();
+	// set up inital text edior config
+  init_editor();
+  
+  // put terminal in raw input mode
+  enableRawMode();
 	
+  // open a text file
 	if(argc > 1){
 		editorOpen(argv[1], &E);
 	}
@@ -25,8 +28,10 @@ int main(int argc, char* argv[]){
 	editorSetStatusMessage(&E, "HELP: Ctrl-Q = quit | Ctrl-S = save | Ctrl-F = Find");
 	
 	while(1){
+    // draw on terminal
 		editorRefreshScreen(&ab, &E);
-		editorProcessKeypress(&E, &ab);
+	  // process user input
+    editorProcessKeypress(&E, &ab);
 	}
 	
 	return 0;
@@ -45,5 +50,6 @@ void init_editor(){
 	E.statusmsg[0] = '\0';
 	E.statusmsg_time = 0;
 	if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowsSize");
-	E.screenrows-=2;
+	// save space for status bar and message bar
+  E.screenrows-=2;
 }

@@ -5,14 +5,15 @@
 #include "editor_operations.h"
 #include "row_operations.h"
 
+// insert char at cursor location
 void editorInsertChar(char c, struct editorConfig* E){
 	// create new row if needed
 	if(E->cy == E->filerows) editorInsertRow(E->filerows, "", 0, E);
-	
 	editorRowInsertChar(&E->rows[E->cy], E->cx, c, E);
 	E->cx++;
 }
 
+// delete char at cursor location
 void editorDelChar(struct editorConfig* E){
 	if(E->cy == E->filerows) return;
 	if(E->cy == 0 && E->cx == 0) return;
@@ -29,6 +30,7 @@ void editorDelChar(struct editorConfig* E){
 	}
 }
 
+// add new line to current file
 void editorInsertNewLine(struct editorConfig* E){
 	if(E->cx == 0){
 		editorInsertRow(E->cy, "", 0, E);

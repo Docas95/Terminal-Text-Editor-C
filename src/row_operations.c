@@ -4,6 +4,7 @@
 #include "main.h"
 #include "row_operations.h"
 
+// add new row at 'at' position of current file
 void editorInsertRow(int at, char* s, size_t len, struct editorConfig* E){
 	if(at < 0 || at > E->filerows) return;
 	
@@ -29,6 +30,7 @@ void editorInsertRow(int at, char* s, size_t len, struct editorConfig* E){
 	E->saved = 0;
 }
 
+// set up row render string
 void editorUpdateRow(erow* row){
 	
 	// count special characters
@@ -54,6 +56,7 @@ void editorUpdateRow(erow* row){
 	row->rlen = index;
 }
 
+// convert cursor raw row position to cursor render row position
 int editorCxToRx(erow* row, int cx){
 	int rx = 0;
 	for(int i = 0; i < cx; i++){
@@ -63,6 +66,7 @@ int editorCxToRx(erow* row, int cx){
 	return rx;
 }
 
+// convert cursor render row position to cursor raw row position
 int editorRxToCx(erow* row, int rx){
 	int cur_rx = 0;
 	int cx;
@@ -76,6 +80,7 @@ int editorRxToCx(erow* row, int rx){
 	return cx;
 }
 
+// insert new char at 'at' position of row 'row'
 void editorRowInsertChar(erow* row, int at, char c, struct editorConfig* E){
 	if(at < 0 || at > row->len) at = row->len;
 	
@@ -91,6 +96,7 @@ void editorRowInsertChar(erow* row, int at, char c, struct editorConfig* E){
 	E->saved = 0;
 }
 
+// delete char at 'at' position of row 'row'
 void editorRowDelChar(erow* row, int at, struct editorConfig* E){
 	if(at < 0 || at > row->len) return;	
 	// move chars after 'at' to the left
@@ -102,11 +108,13 @@ void editorRowDelChar(erow* row, int at, struct editorConfig* E){
 	E->saved = 0;
 }
 
+// free memory allocated for a row
 void editorFreeRow(erow* row){
 	free(row->str);
 	free(row->rstr);
 }
 
+// delete row at 'at' postion of current file
 void editorDelRow(int at, struct editorConfig* E){
 	if(at < 0 || at >= E->filerows) return;
 
@@ -119,6 +127,7 @@ void editorDelRow(int at, struct editorConfig* E){
 	E->saved = 0;
 }
 
+// append string to end of row
 void editorRowAppendString(erow* row, char*s, size_t len, struct editorConfig* E){
 	// allocate memory for appended string
 	row->str = realloc(row->str, row->len + len + 2);

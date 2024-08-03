@@ -7,7 +7,9 @@
 // global variables
 struct termios orig_termios; // original terminal configuration
 
-void enableRawMode(){
+// put terminal in raw input mode
+void enableRawMode()
+{
 	// get terminal attributes
 	if(tcgetattr(STDIN_FILENO, &orig_termios) == 1){
 		die("tcgetattr");
@@ -23,13 +25,16 @@ void enableRawMode(){
 	raw.c_oflag &= ~(OPOST); // output flags
 	raw.c_cflag |= ~(CS8); // control flags
 	
+  // make read() return even without receiving input
 	raw.c_cc[VMIN] = 0; // min input for read() to return
 	raw.c_cc[VTIME] = 1; // min time for read() to return
-	
+
+  // update terminal attributes
 	if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == 1)
 		die("tcsetattr");
 }
 
+// put terminal in cooked input mode
 void disableRawMode(){
 	if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == 1)
 		die("tcsetattr");
@@ -44,6 +49,7 @@ void die(const char* s){
 	exit(1);
 }
 
+// wait to read a char from the terminal and return it
 int editorReadKey(){
 	int nread;
 	char c;
@@ -84,14 +90,14 @@ int editorReadKey(){
 	return c;
 }
 
+// get size of terminal window
 int getWindowSize(int* rows, int* cols){
 	struct winsize ws;
 	
 	// get window size
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0 || ws.ws_row == 0){
-		// in case ioctl() does not work (older terminals, etc)
-		
-		// place cursor at bottom right of screen
+		// in case ioctl() does not work (older terminals, etc)	
+		// place cursor at bottom right of screen and get its position
 		if(write(STDOUT_FILENO, "\x1b[999B\x1b[999C", 12) != 12) return -1;
 		return getCursorPosition(rows, cols);
 	}
@@ -103,6 +109,8 @@ int getWindowSize(int* rows, int* cols){
 	return 0;
 }
 
+// gets cursor position, places x coord in cols and y coord in rows
+// returns 1 if it fails
 int getCursorPosition(int* rows, int* cols){
 	char buff[32];
 	
