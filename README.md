@@ -28,7 +28,6 @@ terminal> ./TextEditor <file_name>
 ```
 
 ## TO-DO
-- Search function
 - Syntax highlighting
 - Line numbering
 - Automatic indentation
