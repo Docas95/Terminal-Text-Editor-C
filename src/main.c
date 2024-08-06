@@ -49,6 +49,7 @@ void init_editor(){
 	E.coloffset = 0;
 	E.statusmsg[0] = '\0';
 	E.statusmsg_time = 0;
+  E.syntax = NULL;
 	if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowsSize");
 	// save space for status bar and message bar
   E.screenrows-=2;

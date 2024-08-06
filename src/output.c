@@ -67,7 +67,40 @@ void editorDrawRows(struct abuf* ab, struct editorConfig* E){
 			int len = E->rows[i+E->rowoffset].rlen - E->coloffset;
 			if(len < 0) len = 0;
 			if(len > E->screencols) len = E->screencols;
-			abAppend(ab, &E->rows[i+E->rowoffset].rstr[E->coloffset], len);
+			
+      char* str = &E->rows[i+E->rowoffset].rstr[E->coloffset];
+      unsigned char* hl = &E->rows[i + E->rowoffset].highlight[E->coloffset];
+      int current_color = -1;
+      for(int j = 0; j < len; j++){
+        if (iscntrl(str[j])){
+          char sym = (str[j] <= 26) ? '@' + str[j] : '?';
+          abAppend(ab, "\x1b[7m", 4);
+          abAppend(ab, &sym, 1);
+          abAppend(ab, "\x1b[m", 3);
+          if(current_color != -1){
+            char buf[16];
+            int clen = snprintf(buf, sizeof(buf), "\x1b[%dm", current_color);
+            abAppend(ab, buf, clen); 
+          }
+        } else if(hl[j] == HL_NORMAL){
+          if(current_color != -1){
+            abAppend(ab, "\x1b[39m", 5);
+            current_color = -1;
+          }
+            abAppend(ab, &str[j], 1);
+        } else {
+          int color = editorSyntaxToColor(hl[j]);
+          if(color != current_color){
+            current_color = color;
+            char buf[16];
+            int clen = snprintf(buf, sizeof(buf), "\x1b[%dm", color);
+            abAppend(ab, buf, clen);
+          }
+            abAppend(ab, &str[j], 1);
+        } 
+      }
+      // set text color to normal
+      abAppend(ab, "\x1b[39m", 5);
 		}
 
 		// clear line
@@ -105,7 +138,7 @@ void editorDrawStatusBar(struct abuf* ab, struct editorConfig* E){
 	// show file name and number of lines
 	int len1 = snprintf(status1, sizeof(status1), "%.20s - %d lines %s", (E->filename) ? E->filename : "[No Name]", E->filerows, (E->saved) ? "" : "(modified)");       
 	// show current line number
-	int len2 = snprintf(status2, sizeof(status2), "%d/%d", E->cy+1, E->filerows);
+	int len2 = snprintf(status2, sizeof(status2), "%s %d/%d", E->syntax ? E->syntax->filetype : "no ft", E->cy+1, E->filerows);
 	
 	// place status1 and status2 on opposite ends of the row
 	abAppend(ab, status1, len1);

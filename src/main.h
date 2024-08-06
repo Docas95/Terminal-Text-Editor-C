@@ -18,17 +18,34 @@
 #include <stdarg.h>
 #include <fcntl.h>
 
-#define CTRL_KEY(k) ((k) & 0x1f)
+#define CTRL_KEY(k) ((k) & 0x1f) 
 #define VERSION "1.0"
 #define TAB_SIZE 4
 #define QUIT_TIMES 3
+#define HL_HIGHLIGHT_NUMBERS (1<<0)
+#define HL_HIGHLIGHT_STRINGS (1<<1)
+#define HLDB_ENTRIES (sizeof(HLDB) / sizeof(HLDB[0]))
 
-// text file row
+struct editorSyntax{
+  char* filetype;
+  char** filematch;
+  char** keywords;
+  char* singleline_comment_start;
+  char* multiline_comment_start;
+  char* multiline_comment_end;
+  int flags;
+  int hl_open_comment;
+};
+
+// file row
 typedef struct erow{
-	char* str; // raw data
-	char* rstr; // data to be rendered on screen
-	int len;
+  int idx;
+  char* str;
+  char* rstr;
+  char* highlight;
+  int len;
 	int rlen;
+  int hl_open_comment;
 }erow;
 
 struct editorConfig{
@@ -46,6 +63,7 @@ struct editorConfig{
 	int filerows; // number of rows inside file 
 	erow* rows; // array of file rows 
 	int saved; // set to 0 if changes have been made without saving file
+  struct editorSyntax* syntax; // current file syntax settings
 };
 
 enum editorKeys{
@@ -55,6 +73,17 @@ enum editorKeys{
 	ARROW_BOTTOM,
 	ARROW_TOP,
 	DEL_KEY
+};
+
+enum editorHighlight{
+  HL_NORMAL = 0,
+  HL_NUMBER,
+  HL_MATCH,
+  HL_STRING,
+  HL_COMMENT,
+  HL_MLCOMMENT,
+  HL_KEYWORD1,
+  HL_KEYWORD2
 };
 
 void init_editor();

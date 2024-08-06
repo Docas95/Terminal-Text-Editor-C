@@ -4,6 +4,11 @@ A simple text editor for the terminal, coded using the C programming language.
 ## Commands
 - Ctrl+Q to quit
 - Ctrl+S to save file
+- Ctrl+F to search for word/character
+
+## Features
+
+- TODO
 
 ## How to Build
 
@@ -28,7 +33,8 @@ terminal> ./TextEditor <file_name>
 ```
 
 ## TO-DO
-- Syntax highlighting
 - Line numbering
 - Automatic indentation
+- Makefile highlights
+- Fix 'tab' characer deletion bug
 - Support for multiple files

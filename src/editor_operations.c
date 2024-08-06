@@ -40,7 +40,7 @@ void editorInsertNewLine(struct editorConfig* E){
 		row = &E->rows[E->cy];
 		row->len = E->cx;
 		row->str[row->len] = '\0';
-		editorUpdateRow(row);
+		editorUpdateRow(row, E);
 	}
 	E->cy++;
 	E->cx = 0;

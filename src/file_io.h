@@ -6,4 +6,5 @@ char* editorRowsToString(int* buflen, struct editorConfig* E);
 void editorSave(struct editorConfig* E, struct abuf* ab);
 void editorFind(struct editorConfig* E, struct abuf* ab);
 void editorFindCallBack(char* query, int key, struct editorConfig* E);
+void editorSelectSyntaxHighlight(struct editorConfig* E);
 #endif
