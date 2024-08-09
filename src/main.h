@@ -44,7 +44,7 @@ typedef struct erow{
   char* rstr;
   char* highlight;
   int len;
-	int rlen;
+  int rlen;
   int hl_open_comment;
 }erow;
 

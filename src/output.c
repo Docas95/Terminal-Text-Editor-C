@@ -28,7 +28,7 @@ void editorRefreshScreen(struct abuf* ab, struct editorConfig* E){
 	
 	// place cursor in correct place
 	char buff[100];
-	int len = snprintf(buff, sizeof(buff), "\x1b[%d;%dH", E->cy + 1 - E->rowoffset, E->rx + 1 - E->coloffset);
+	int len = snprintf(buff, sizeof(buff), "\x1b[%d;%dH", E->cy + 1 - E->rowoffset, E->rx + 1 + 4 - E->coloffset);
 	abAppend(ab, buff, len);
 	
 	// show cursor
@@ -63,6 +63,14 @@ void editorDrawRows(struct abuf* ab, struct editorConfig* E){
 				abAppend(ab, "~", 1);
 			}
 		} else {
+			// number file lines
+			char row_num[32];
+			int row_num_len = snprintf(row_num, sizeof(row_num), "%d  ", i + E->rowoffset);
+			abAppend(ab, "\x1b[34m", 5);
+			abAppend(ab, row_num, 3);
+			abAppend(ab, "   ", ((4-row_num_len > 0) ? 4-row_num_len : 1));
+			abAppend(ab, "\x1b[39m", 5);
+
 			// print contents from file
 			int len = E->rows[i+E->rowoffset].rlen - E->coloffset;
 			if(len < 0) len = 0;

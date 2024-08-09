@@ -4,16 +4,12 @@
 #include "main.h"
 #include "row_operations.h"
 
-/**
-  * owo
-* */
-
 // add new row at 'at' position of current file
 void editorInsertRow(int at, char* s, size_t len, struct editorConfig* E){
 	if(at < 0 || at > E->filerows) return;
 	
 	// allocate memory for +1 row
-	E->rows = realloc(E->rows, sizeof(erow) * (E->filerows + 1));
+	E->rows = realloc(E->rows, sizeof(erow) * (E->filerows + 2));
 	memmove(&E->rows[at+1], &E->rows[at], sizeof(erow) * (E->filerows - at)); 
   for(int i = at + 1; i < E->filerows; i++) E->rows[i].idx++;
 
@@ -124,7 +120,7 @@ void editorRowDelChar(erow* row, int at, struct editorConfig* E){
 void editorFreeRow(erow* row){
 	free(row->str);
 	free(row->rstr);
-  free(row->highlight);
+  	free(row->highlight);
 }
 
 // delete row at 'at' postion of current file

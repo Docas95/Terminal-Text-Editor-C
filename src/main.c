@@ -53,4 +53,5 @@ void init_editor(){
 	if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowsSize");
 	// save space for status bar and message bar
   E.screenrows-=2;
+  E.screencols-=4;
 }

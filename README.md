@@ -8,7 +8,10 @@ A simple text editor for the terminal, coded using the C programming language.
 
 ## Features
 
-- TODO
+- Open/Create files
+- Save/Discard changes
+- Syntax Highlights (C and Makefile)
+- Line Numbering
 
 ## How to Build
 
@@ -33,7 +36,6 @@ terminal> ./TextEditor <file_name>
 ```
 
 ## TO-DO
-- Line numbering
 - Automatic indentation
 - Makefile highlights
 - Fix 'tab' characer deletion bug

@@ -20,7 +20,7 @@ void editorDelChar(struct editorConfig* E){
 	
 	erow* row = &E->rows[E->cy];
 	if(E->cx > 0){
-		editorRowDelChar(row, E->cx, E);
+		editorRowDelChar(row, E->cx-1, E);
 		E->cx--;
 	} else {
 		E->cx = E->rows[E->cy - 1].len;
