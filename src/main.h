@@ -59,6 +59,8 @@ struct editorConfig{
 	char statusmsg[100]; // status msg content
 	time_t statusmsg_time;  // time message was sent
 	
+	int auto_indent; // set to 0 if auto indentation is turned off 
+		
 	char* filename; // name of opened file
 	int filerows; // number of rows inside file 
 	erow* rows; // array of file rows 

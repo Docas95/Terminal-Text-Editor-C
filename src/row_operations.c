@@ -152,6 +152,18 @@ void editorRowAppendString(erow* row, char*s, size_t len, struct editorConfig* E
 	E->saved = 0;
 }
 
+// set indentation to a row based on previous row
+void editorRowSetIndentation(erow* row, struct editorConfig* E){
+	if(row->idx == 0) return;
+
+	int i = 0;
+	erow* prevrow = &E->rows[row->idx-1];
+	while(isspace(prevrow->str[i])){
+		editorRowInsertChar(row, i, prevrow->str[i], E);
+		i++;
+	}
+}
+
 // update row syntax highlighting
 void editorUpdateSyntax(erow* row, struct editorConfig* E){
   row->highlight = malloc(row->rlen);

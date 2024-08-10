@@ -41,6 +41,12 @@ void editorInsertNewLine(struct editorConfig* E){
 		row->len = E->cx;
 		row->str[row->len] = '\0';
 		editorUpdateRow(row, E);
+		if(E->auto_indent){
+		       	editorRowSetIndentation(&E->rows[E->cy+1], E);
+			E->cy++;
+			E->cx = E->rows[E->cy].len;
+			return;	
+		}
 	}
 	E->cy++;
 	E->cx = 0;

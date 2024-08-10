@@ -13,4 +13,5 @@ void editorRowAppendString(erow* row, char*s, size_t len, struct editorConfig* E
 void editorUpdateSyntax(erow* row, struct editorConfig* E);
 int editorSyntaxToColor(int hl);
 int is_separator(int c);
+void editorRowSetIndentation(erow* row, struct editorConfig* E);
 #endif

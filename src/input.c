@@ -46,6 +46,13 @@ void editorProcessKeypress(struct editorConfig* E, struct abuf* ab){
 			editorFind(E, ab);
 			break;
 
+	// CTRL-N  allows user to activate/deactivate automatic indentation
+		case CTRL_KEY('n'):
+			E->auto_indent = !E->auto_indent;
+			char msg[100];
+		        snprintf(msg, sizeof(msg),E->auto_indent ? "Activated Auto-Indentation" : "Deactivated Auto-Indentation");
+			editorSetStatusMessage(E, msg);
+			break;
     // handle character deletion  
 		case BACKSPACE:
 		case CTRL_KEY('h'):

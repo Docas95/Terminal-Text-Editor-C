@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
 		editorOpen(argv[1], &E);
 	}
 	
-	editorSetStatusMessage(&E, "HELP: Ctrl-Q = quit | Ctrl-S = save | Ctrl-F = Find");
+	editorSetStatusMessage(&E, "HELP: Ctrl-Q = quit | Ctrl-S = save | Ctrl-F = find | Ctrl - N = auto-indentation toggle");
 	
 	while(1){
     // draw on terminal
@@ -49,9 +49,11 @@ void init_editor(){
 	E.coloffset = 0;
 	E.statusmsg[0] = '\0';
 	E.statusmsg_time = 0;
+	E.auto_indent = 1;
   E.syntax = NULL;
 	if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowsSize");
 	// save space for status bar and message bar
   E.screenrows-=2;
+	// save space for line numbering
   E.screencols-=4;
 }

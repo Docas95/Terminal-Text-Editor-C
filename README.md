@@ -5,6 +5,7 @@ A simple text editor for the terminal, coded using the C programming language.
 - Ctrl+Q to quit
 - Ctrl+S to save file
 - Ctrl+F to search for word/character
+- Ctrl+N to activate/deactivate automatic indentation
 
 ## Features
 
@@ -12,6 +13,7 @@ A simple text editor for the terminal, coded using the C programming language.
 - Save/Discard changes
 - Syntax Highlights (C and Makefile)
 - Line Numbering
+- Automatic Indentation
 
 ## How to Build
 
@@ -36,7 +38,4 @@ terminal> ./TextEditor <file_name>
 ```
 
 ## TO-DO
-- Automatic indentation
 - Makefile highlights
-- Fix 'tab' characer deletion bug
-- Support for multiple files
