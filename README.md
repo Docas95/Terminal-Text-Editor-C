@@ -37,5 +37,3 @@ terminal> ./TextEditor
 terminal> ./TextEditor <file_name>
 ```
 
-## TO-DO
-- Makefile highlights

@@ -10,6 +10,8 @@
 #include "input.h"
 
 // filetypes
+
+// C
 char* C_HL_extensions[] = {".c", ".h", ".cpp", NULL};
 char* C_HL_keywords[] = {
   "switch", "if", "else", "while", "for", "break", "break", "continue",
@@ -19,6 +21,11 @@ char* C_HL_keywords[] = {
   "unsigned|", NULL
 };
 
+// makefile
+char* makefile_extensions[] = {"makefile", "Makefile"};
+char* makefile_keywords[] = {NULL};
+
+
 struct editorSyntax HLDB[] = {
   { 
     "c",
@@ -27,6 +34,13 @@ struct editorSyntax HLDB[] = {
     "//","/*", "*/",
     HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
   },
+  {
+    "makefile",
+    makefile_extensions,
+    makefile_keywords,
+    "#", "$(", ")",
+    0
+  }
 };
 
 // open new file, if file can't be found an empty file will be opened
